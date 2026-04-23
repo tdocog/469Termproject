@@ -194,6 +194,7 @@ extern GlobSimInfo* zinfo;
 
 //Process-wide functions, defined in zsim.cpp
 uint32_t getCid(uint32_t tid);
+uint32_t GetCurISeqSignature(uint32_t tid);
 uint32_t TakeBarrier(uint32_t tid, uint32_t cid);
 void SimEnd(); //only call point out of zsim.cpp should be watchdog threads
 

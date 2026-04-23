@@ -167,9 +167,17 @@ BaseCache* BuildCacheBank(Config& config, const string& prefix, g_string& name, 
         rp = new RandReplPolicy(candidates);
     } else if (replType == "SRRIP") {
         // max value of RRPV, you need to pass it to your SRRIP constructor
-        uint32_t rpvMax = 3;
+        uint32_t rpvMax = config.get<uint32_t>(prefix + "repl.rpvMax", 3);
         assert(isPow2(rpvMax + 1));
-        // add your SRRIP construction code here
+        rp = new SRRIPReplPolicy(numLines, rpvMax);
+    } else if (replType == "SHiP-ISeq" || replType == "SHiPISeq") {
+        uint32_t rpvMax = config.get<uint32_t>(prefix + "repl.rpvMax", 3);
+        uint32_t shctEntries = config.get<uint32_t>(prefix + "repl.shctEntries", 16384);
+        uint32_t shctCtrBits = config.get<uint32_t>(prefix + "repl.shctCtrBits", 3);
+        uint32_t shctInit = config.get<uint32_t>(prefix + "repl.shctInit", 1);
+        assert(isPow2(rpvMax + 1));
+        assert(isPow2(shctEntries));
+        rp = new SHiPISeqReplPolicy(numLines, rpvMax, shctEntries, shctCtrBits, shctInit);
 
     } else if (replType == "WayPart" || replType == "Vantage" || replType == "IdealLRUPart") {
         if (replType == "WayPart" && arrayType != "SetAssoc") panic("WayPart replacement requires SetAssoc array");
@@ -1035,4 +1043,3 @@ void SimInit(const char* configFile, const char* outputDir, uint32_t shmid) {
     //Causes every other process to wake up
     gm_set_glob_ptr(zinfo);
 }
-

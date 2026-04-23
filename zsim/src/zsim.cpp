@@ -110,6 +110,10 @@ static ProcessTreeNode* procTreeNode;
 #define UNINITIALIZED_CID ((uint32_t)-2) //Value set at initialization
 
 static uint32_t cids[MAX_THREADS];
+static uint32_t iseqHistory[MAX_THREADS];
+
+static const uint32_t SHIP_ISEQ_BITS = 14;
+static const uint32_t SHIP_ISEQ_MASK = (1u << SHIP_ISEQ_BITS) - 1;
 
 // Per TID core pointers (TODO: phase out cid/tid state --- this is enough)
 Core* cores[MAX_THREADS];
@@ -134,6 +138,11 @@ uint32_t getCid(uint32_t tid) {
     uint32_t cid = cids[tid];
     //assert(cid != INVALID_CID);
     return cid;
+}
+
+uint32_t GetCurISeqSignature(uint32_t tid) {
+    assert(tid < MAX_THREADS);
+    return iseqHistory[tid];
 }
 
 // Internal function declarations
@@ -189,6 +198,10 @@ VOID PIN_FAST_ANALYSIS_CALL IndirectPredLoadSingle(THREADID tid, ADDRINT addr, B
 
 VOID PIN_FAST_ANALYSIS_CALL IndirectPredStoreSingle(THREADID tid, ADDRINT addr, BOOL pred) {
     fPtrs[tid].predStorePtr(tid, addr, pred);
+}
+
+VOID PIN_FAST_ANALYSIS_CALL RecordISeqInstruction(THREADID tid, UINT32 isMem) {
+    iseqHistory[tid] = ((iseqHistory[tid] << 1) | (isMem & 1u)) & SHIP_ISEQ_MASK;
 }
 
 
@@ -570,6 +583,10 @@ VOID Instruction(INS ins) {
             INS_InsertCall(ins, IPOINT_BEFORE, (AFUNPTR) IndirectRecordBranch, IARG_FAST_ANALYSIS_CALL, IARG_THREAD_ID,
                     IARG_INST_PTR, IARG_BRANCH_TAKEN, IARG_BRANCH_TARGET_ADDR, IARG_FALLTHROUGH_ADDR, IARG_END);
         }
+
+        UINT32 isMem = (INS_IsMemoryRead(ins) || INS_HasMemoryRead2(ins) || INS_IsMemoryWrite(ins)) ? 1 : 0;
+        INS_InsertCall(ins, IPOINT_BEFORE, (AFUNPTR) RecordISeqInstruction,
+                IARG_FAST_ANALYSIS_CALL, IARG_THREAD_ID, IARG_UINT32, isMem, IARG_END);
     }
 
     //Intercept and process magic ops
@@ -821,6 +838,7 @@ void SimThreadStart(THREADID tid) {
     if (tid > MAX_THREADS) panic("tid > MAX_THREADS");
     zinfo->sched->start(procIdx, tid, procTreeNode->getMask());
     activeThreads[tid] = true;
+    iseqHistory[tid] = 0;
 
     //Pinning
 #if 0
@@ -1067,6 +1085,7 @@ VOID AfterForkInChild(THREADID tid, const CONTEXT* ctxt, VOID * arg) {
         activeThreads[i] = false;
         inSyscall[i] = false;
         cores[i] = nullptr;
+        iseqHistory[i] = 0;
     }
 
     //We need to launch another copy of the FF control thread
@@ -1509,6 +1528,7 @@ int main(int argc, char *argv[]) {
     for (uint32_t i = 0; i < MAX_THREADS; i++) {
         fPtrs[i] = joinPtrs;
         cids[i] = UNINITIALIZED_CID;
+        iseqHistory[i] = 0;
     }
 
     info("Started process, PID %d", getpid()); //NOTE: external scripts expect this line, please do not change without checking first
@@ -1570,4 +1590,3 @@ int main(int argc, char *argv[]) {
     }
     return 0;
 }
-

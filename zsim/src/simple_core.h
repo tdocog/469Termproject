@@ -59,9 +59,9 @@ class SimpleCore : public Core {
 
     protected:
         //Simulation functions
-        inline void load(Address addr);
-        inline void store(Address addr);
-        inline void bbl(Address bblAddr, BblInfo* bblInstrs);
+        inline void load(Address addr, uint32_t signature);
+        inline void store(Address addr, uint32_t signature);
+        inline void bbl(Address bblAddr, BblInfo* bblInstrs, uint32_t signature);
 
         static void LoadFunc(THREADID tid, ADDRINT addr);
         static void StoreFunc(THREADID tid, ADDRINT addr);
@@ -73,4 +73,3 @@ class SimpleCore : public Core {
 }  ATTR_LINE_ALIGNED; //This needs to take up a whole cache line, or false sharing will be extremely frequent
 
 #endif  // SIMPLE_CORE_H_
-

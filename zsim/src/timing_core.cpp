@@ -77,26 +77,26 @@ void TimingCore::leave() {
     cRec.notifyLeave(curCycle);
 }
 
-void TimingCore::loadAndRecord(Address addr) {
+void TimingCore::loadAndRecord(Address addr, uint32_t signature) {
     uint64_t startCycle = curCycle;
-    curCycle = l1d->load(addr, curCycle);
+    curCycle = l1d->load(addr, curCycle, signature);
     cRec.record(startCycle);
 }
 
-void TimingCore::storeAndRecord(Address addr) {
+void TimingCore::storeAndRecord(Address addr, uint32_t signature) {
     uint64_t startCycle = curCycle;
-    curCycle = l1d->store(addr, curCycle);
+    curCycle = l1d->store(addr, curCycle, signature);
     cRec.record(startCycle);
 }
 
-void TimingCore::bblAndRecord(Address bblAddr, BblInfo* bblInfo) {
+void TimingCore::bblAndRecord(Address bblAddr, BblInfo* bblInfo, uint32_t signature) {
     instrs += bblInfo->instrs;
     curCycle += bblInfo->instrs;
 
     Address endBblAddr = bblAddr + bblInfo->bytes;
     for (Address fetchAddr = bblAddr; fetchAddr < endBblAddr; fetchAddr+=(1 << lineBits)) {
         uint64_t startCycle = curCycle;
-        curCycle = l1i->load(fetchAddr, curCycle);
+        curCycle = l1i->load(fetchAddr, curCycle, signature);
         cRec.record(startCycle);
     }
 }
@@ -107,16 +107,16 @@ InstrFuncPtrs TimingCore::GetFuncPtrs() {
 }
 
 void TimingCore::LoadAndRecordFunc(THREADID tid, ADDRINT addr) {
-    static_cast<TimingCore*>(cores[tid])->loadAndRecord(addr);
+    static_cast<TimingCore*>(cores[tid])->loadAndRecord(addr, GetCurISeqSignature(tid));
 }
 
 void TimingCore::StoreAndRecordFunc(THREADID tid, ADDRINT addr) {
-    static_cast<TimingCore*>(cores[tid])->storeAndRecord(addr);
+    static_cast<TimingCore*>(cores[tid])->storeAndRecord(addr, GetCurISeqSignature(tid));
 }
 
 void TimingCore::BblAndRecordFunc(THREADID tid, ADDRINT bblAddr, BblInfo* bblInfo) {
     TimingCore* core = static_cast<TimingCore*>(cores[tid]);
-    core->bblAndRecord(bblAddr, bblInfo);
+    core->bblAndRecord(bblAddr, bblInfo, GetCurISeqSignature(tid));
 
     while (core->curCycle > core->phaseEndCycle) {
         core->phaseEndCycle += zinfo->phaseLength;
@@ -127,10 +127,9 @@ void TimingCore::BblAndRecordFunc(THREADID tid, ADDRINT bblAddr, BblInfo* bblInf
 }
 
 void TimingCore::PredLoadAndRecordFunc(THREADID tid, ADDRINT addr, BOOL pred) {
-    if (pred) static_cast<TimingCore*>(cores[tid])->loadAndRecord(addr);
+    if (pred) static_cast<TimingCore*>(cores[tid])->loadAndRecord(addr, GetCurISeqSignature(tid));
 }
 
 void TimingCore::PredStoreAndRecordFunc(THREADID tid, ADDRINT addr, BOOL pred) {
-    if (pred) static_cast<TimingCore*>(cores[tid])->storeAndRecord(addr);
+    if (pred) static_cast<TimingCore*>(cores[tid])->storeAndRecord(addr, GetCurISeqSignature(tid));
 }
-

@@ -383,6 +383,8 @@ class OOOCore : public Core {
         //Record load and store addresses
         Address loadAddrs[256];
         Address storeAddrs[256];
+        uint32_t loadSigs[256];
+        uint32_t storeSigs[256];
         uint32_t loads;
         uint32_t stores;
 
@@ -468,8 +470,8 @@ class OOOCore : public Core {
         inline void useA3forBranchPred() {branchPred.useA3();}
 
     private:
-        inline void load(Address addr);
-        inline void store(Address addr);
+        inline void load(Address addr, uint32_t signature);
+        inline void store(Address addr, uint32_t signature);
 
         /* NOTE: Analysis routines cannot touch curCycle directly, must use
          * advance() for long jumps or insWindow.advancePos() for 1-cycle
@@ -488,7 +490,7 @@ class OOOCore : public Core {
 
         inline void branch(Address pc, bool taken, Address takenNpc, Address notTakenNpc);
 
-        inline void bbl(Address bblAddr, BblInfo* bblInfo);
+        inline void bbl(Address bblAddr, BblInfo* bblInfo, uint32_t signature);
 
         static void LoadFunc(THREADID tid, ADDRINT addr);
         static void StoreFunc(THREADID tid, ADDRINT addr);
