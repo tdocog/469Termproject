@@ -1,0 +1,48 @@
+#!/bin/sh
+
+repl="SHiP-ISeq"
+
+spec_benches="bzip2 gcc mcf hmmer sjeng libquantum milc cactusADM leslie3d namd soplex calculix lbm xalan"
+parsec_benches="blackscholes bodytrack canneal dedup fluidanimate freqmine streamcluster swaptions x264"
+
+suite="ALL"
+if [ "$#" -gt 1 ]; then
+    echo ""
+    echo "Usage: ./hw4runall_ship_iseq [ALL|SPEC|PARSEC]"
+    exit 1
+elif [ "$#" -eq 1 ]; then
+    suite=$1
+fi
+
+run_spec() {
+    for bench in $spec_benches; do
+        mkdir -p outputs/hw4/$repl/${bench}
+        echo "./build/opt/zsim configs/hw4/$repl/${bench}.cfg > outputs/hw4/$repl/${bench}/${bench}.log 2>&1"
+        ./build/opt/zsim configs/hw4/$repl/${bench}.cfg > outputs/hw4/$repl/${bench}/${bench}.log 2>&1 || exit $?
+    done
+}
+
+run_parsec() {
+    for bench in $parsec_benches; do
+        mkdir -p outputs/hw4/$repl/${bench}_8c_simlarge
+        echo "./build/opt/zsim configs/hw4/$repl/${bench}_8c_simlarge.cfg > outputs/hw4/$repl/${bench}_8c_simlarge/${bench}.log 2>&1"
+        ./build/opt/zsim configs/hw4/$repl/${bench}_8c_simlarge.cfg > outputs/hw4/$repl/${bench}_8c_simlarge/${bench}.log 2>&1 || exit $?
+    done
+}
+
+case "$suite" in
+    ALL)
+        run_spec
+        run_parsec
+        ;;
+    SPEC)
+        run_spec
+        ;;
+    PARSEC)
+        run_parsec
+        ;;
+    *)
+        echo "No such benchmark suite, please specify ALL, SPEC, or PARSEC"
+        exit 1
+        ;;
+esac
