@@ -1,6 +1,11 @@
 #!/bin/sh
 
+script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd)
+cd "$script_dir" || exit 1
+
 repl="SHiP-ISeq"
+zsim_bin="./build/opt/zsim"
+config_dir="configs/hw4/$repl"
 
 spec_benches="bzip2 gcc mcf hmmer sjeng libquantum milc cactusADM leslie3d namd soplex calculix lbm xalan"
 parsec_benches="blackscholes bodytrack canneal dedup fluidanimate freqmine streamcluster swaptions x264"
@@ -14,19 +19,29 @@ elif [ "$#" -eq 1 ]; then
     suite=$1
 fi
 
+if [ ! -d "$config_dir" ]; then
+    echo "Missing $config_dir. Run this script from the zsim directory."
+    exit 1
+fi
+
+if [ ! -x "$zsim_bin" ]; then
+    echo "Missing executable $zsim_bin. Build zsim first, then rerun this script."
+    exit 1
+fi
+
 run_spec() {
     for bench in $spec_benches; do
         mkdir -p outputs/hw4/$repl/${bench}
-        echo "./build/opt/zsim configs/hw4/$repl/${bench}.cfg > outputs/hw4/$repl/${bench}/${bench}.log 2>&1"
-        ./build/opt/zsim configs/hw4/$repl/${bench}.cfg > outputs/hw4/$repl/${bench}/${bench}.log 2>&1 || exit $?
+        echo "$zsim_bin $config_dir/${bench}.cfg > outputs/hw4/$repl/${bench}/${bench}.log 2>&1"
+        $zsim_bin $config_dir/${bench}.cfg > outputs/hw4/$repl/${bench}/${bench}.log 2>&1 || exit $?
     done
 }
 
 run_parsec() {
     for bench in $parsec_benches; do
         mkdir -p outputs/hw4/$repl/${bench}_8c_simlarge
-        echo "./build/opt/zsim configs/hw4/$repl/${bench}_8c_simlarge.cfg > outputs/hw4/$repl/${bench}_8c_simlarge/${bench}.log 2>&1"
-        ./build/opt/zsim configs/hw4/$repl/${bench}_8c_simlarge.cfg > outputs/hw4/$repl/${bench}_8c_simlarge/${bench}.log 2>&1 || exit $?
+        echo "$zsim_bin $config_dir/${bench}_8c_simlarge.cfg > outputs/hw4/$repl/${bench}_8c_simlarge/${bench}.log 2>&1"
+        $zsim_bin $config_dir/${bench}_8c_simlarge.cfg > outputs/hw4/$repl/${bench}_8c_simlarge/${bench}.log 2>&1 || exit $?
     done
 }
 
