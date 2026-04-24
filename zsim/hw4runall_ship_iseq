@@ -11,13 +11,31 @@ spec_benches="bzip2 gcc mcf hmmer sjeng libquantum milc cactusADM leslie3d namd 
 parsec_benches="blackscholes bodytrack canneal dedup fluidanimate freqmine streamcluster swaptions x264"
 
 suite="ALL"
-if [ "$#" -gt 1 ]; then
+bg_mode=1
+
+usage() {
     echo ""
-    echo "Usage: ./hw4runall_ship_iseq [ALL|SPEC|PARSEC]"
+    echo "Usage: ./hw4runall_ship_iseq [ALL|SPEC|PARSEC] [--fg]"
     exit 1
-elif [ "$#" -eq 1 ]; then
-    suite=$1
+}
+
+if [ "$#" -gt 2 ]; then
+    usage
 fi
+
+for arg in "$@"; do
+    case "$arg" in
+        ALL|SPEC|PARSEC)
+            suite=$arg
+            ;;
+        --fg)
+            bg_mode=0
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
 
 if [ ! -d "$config_dir" ]; then
     echo "Missing $config_dir. Run this script from the zsim directory."
@@ -29,35 +47,65 @@ if [ ! -x "$zsim_bin" ]; then
     exit 1
 fi
 
+driver_dir="outputs/hw4/$repl/_driver"
+mkdir -p "$driver_dir"
+driver_log="$driver_dir/${suite}.log"
+pid_file="$driver_dir/${suite}.pid"
+
+run_one() {
+    cfg="$1"
+    outdir="$2"
+    logfile="$3"
+
+    mkdir -p "$outdir"
+    echo "[$(date)] START $cfg"
+    echo "$zsim_bin $cfg > $logfile 2>&1"
+    "$zsim_bin" "$cfg" > "$logfile" 2>&1 || exit $?
+    echo "[$(date)] DONE  $cfg"
+}
+
 run_spec() {
     for bench in $spec_benches; do
-        mkdir -p outputs/hw4/$repl/${bench}
-        echo "$zsim_bin $config_dir/${bench}.cfg > outputs/hw4/$repl/${bench}/${bench}.log 2>&1"
-        $zsim_bin $config_dir/${bench}.cfg > outputs/hw4/$repl/${bench}/${bench}.log 2>&1 || exit $?
+        run_one \
+            "$config_dir/${bench}.cfg" \
+            "outputs/hw4/$repl/${bench}" \
+            "outputs/hw4/$repl/${bench}/${bench}.log"
     done
 }
 
 run_parsec() {
     for bench in $parsec_benches; do
-        mkdir -p outputs/hw4/$repl/${bench}_8c_simlarge
-        echo "$zsim_bin $config_dir/${bench}_8c_simlarge.cfg > outputs/hw4/$repl/${bench}_8c_simlarge/${bench}.log 2>&1"
-        $zsim_bin $config_dir/${bench}_8c_simlarge.cfg > outputs/hw4/$repl/${bench}_8c_simlarge/${bench}.log 2>&1 || exit $?
+        run_one \
+            "$config_dir/${bench}_8c_simlarge.cfg" \
+            "outputs/hw4/$repl/${bench}_8c_simlarge" \
+            "outputs/hw4/$repl/${bench}_8c_simlarge/${bench}.log"
     done
 }
 
-case "$suite" in
-    ALL)
-        run_spec
-        run_parsec
-        ;;
-    SPEC)
-        run_spec
-        ;;
-    PARSEC)
-        run_parsec
-        ;;
-    *)
-        echo "No such benchmark suite, please specify ALL, SPEC, or PARSEC"
-        exit 1
-        ;;
-esac
+run_selected() {
+    case "$suite" in
+        SPEC)   run_spec ;;
+        PARSEC) run_parsec ;;
+        ALL)
+            run_spec
+            run_parsec
+            ;;
+        *)
+            echo "Invalid suite: $suite"
+            usage
+            ;;
+    esac
+}
+
+if [ "$bg_mode" -eq 1 ]; then
+    nohup "$0" "$suite" --fg > "$driver_log" 2>&1 &
+    bg_pid=$!
+    echo "$bg_pid" > "$pid_file"
+    echo "Started in background."
+    echo "PID: $bg_pid"
+    echo "Driver log: $driver_log"
+    echo "PID file: $pid_file"
+    exit 0
+fi
+
+run_selected
