@@ -12,6 +12,8 @@ parsec_benches="blackscholes bodytrack canneal dedup fluidanimate freqmine strea
 
 suite="ALL"
 bg_mode=1
+ok_count=0
+fail_count=0
 
 usage() {
     echo ""
@@ -51,34 +53,40 @@ driver_dir="outputs/hw4/$repl/_driver"
 mkdir -p "$driver_dir"
 driver_log="$driver_dir/${suite}.log"
 pid_file="$driver_dir/${suite}.pid"
+fail_log="$driver_dir/${suite}.failures"
+cfg_list="$driver_dir/${suite}.configs"
 
-run_one() {
+run_cfg() {
     cfg="$1"
-    outdir="$2"
-    logfile="$3"
+    bench=$(basename "$cfg" .cfg)
+    log_name=${bench%_8c_simlarge}
+    outdir="outputs/hw4/$repl/$bench"
+    logfile="$outdir/$log_name.log"
 
     mkdir -p "$outdir"
     echo "[$(date)] START $cfg"
     echo "$zsim_bin $cfg > $logfile 2>&1"
-    "$zsim_bin" "$cfg" > "$logfile" 2>&1 || exit $?
-    echo "[$(date)] DONE  $cfg"
+    "$zsim_bin" "$cfg" > "$logfile" 2>&1
+    status=$?
+    if [ "$status" -eq 0 ]; then
+        ok_count=$((ok_count + 1))
+        echo "[$(date)] DONE  $cfg"
+    else
+        fail_count=$((fail_count + 1))
+        echo "[$(date)] FAIL  $cfg exit=$status"
+        echo "$cfg exit=$status log=$logfile" >> "$fail_log"
+    fi
 }
 
 run_spec() {
     for bench in $spec_benches; do
-        run_one \
-            "$config_dir/${bench}.cfg" \
-            "outputs/hw4/$repl/${bench}" \
-            "outputs/hw4/$repl/${bench}/${bench}.log"
+        run_cfg "$config_dir/${bench}.cfg"
     done
 }
 
 run_parsec() {
     for bench in $parsec_benches; do
-        run_one \
-            "$config_dir/${bench}_8c_simlarge.cfg" \
-            "outputs/hw4/$repl/${bench}_8c_simlarge" \
-            "outputs/hw4/$repl/${bench}_8c_simlarge/${bench}.log"
+        run_cfg "$config_dir/${bench}_8c_simlarge.cfg"
     done
 }
 
@@ -87,8 +95,10 @@ run_selected() {
         SPEC)   run_spec ;;
         PARSEC) run_parsec ;;
         ALL)
-            run_spec
-            run_parsec
+            find "$config_dir" -maxdepth 1 -type f -name '*.cfg' | sort > "$cfg_list"
+            while IFS= read -r cfg; do
+                run_cfg "$cfg"
+            done < "$cfg_list"
             ;;
         *)
             echo "Invalid suite: $suite"
@@ -108,4 +118,11 @@ if [ "$bg_mode" -eq 1 ]; then
     exit 0
 fi
 
+rm -f "$fail_log"
+rm -f "$cfg_list"
 run_selected
+echo "[$(date)] SUMMARY ok=$ok_count failed=$fail_count"
+if [ "$fail_count" -ne 0 ]; then
+    echo "Failures: $fail_log"
+    exit 1
+fi
