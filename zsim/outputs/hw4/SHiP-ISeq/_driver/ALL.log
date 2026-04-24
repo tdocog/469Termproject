@@ -1,0 +1,20 @@
+[Wed Apr 22 22:22:01 CDT 2026] START configs/hw4/SHiP-ISeq/bzip2.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/bzip2.cfg > outputs/hw4/SHiP-ISeq/bzip2/bzip2.log 2>&1
+[Wed Apr 22 22:23:08 CDT 2026] DONE  configs/hw4/SHiP-ISeq/bzip2.cfg
+[Wed Apr 22 22:23:08 CDT 2026] START configs/hw4/SHiP-ISeq/gcc.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/gcc.cfg > outputs/hw4/SHiP-ISeq/gcc/gcc.log 2>&1
+[Wed Apr 22 22:33:31 CDT 2026] DONE  configs/hw4/SHiP-ISeq/gcc.cfg
+[Wed Apr 22 22:33:31 CDT 2026] START configs/hw4/SHiP-ISeq/mcf.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/mcf.cfg > outputs/hw4/SHiP-ISeq/mcf/mcf.log 2>&1
+[Wed Apr 22 22:41:01 CDT 2026] DONE  configs/hw4/SHiP-ISeq/mcf.cfg
+[Wed Apr 22 22:41:01 CDT 2026] START configs/hw4/SHiP-ISeq/hmmer.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/hmmer.cfg > outputs/hw4/SHiP-ISeq/hmmer/hmmer.log 2>&1
+[Wed Apr 22 23:44:52 CDT 2026] DONE  configs/hw4/SHiP-ISeq/hmmer.cfg
+[Wed Apr 22 23:44:52 CDT 2026] START configs/hw4/SHiP-ISeq/sjeng.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/sjeng.cfg > outputs/hw4/SHiP-ISeq/sjeng/sjeng.log 2>&1
+[Thu Apr 23 00:33:33 CDT 2026] DONE  configs/hw4/SHiP-ISeq/sjeng.cfg
+[Thu Apr 23 00:33:33 CDT 2026] START configs/hw4/SHiP-ISeq/libquantum.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/libquantum.cfg > outputs/hw4/SHiP-ISeq/libquantum/libquantum.log 2>&1
+[Thu Apr 23 01:52:54 CDT 2026] DONE  configs/hw4/SHiP-ISeq/libquantum.cfg
+[Thu Apr 23 01:52:54 CDT 2026] START configs/hw4/SHiP-ISeq/milc.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/milc.cfg > outputs/hw4/SHiP-ISeq/milc/milc.log 2>&1
