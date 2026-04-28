@@ -1,23 +1,39 @@
+_setup_env_dir="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+
+_setup_env_fail() {
+    echo "setup_env: $*" >&2
+    return 1 2>/dev/null || exit 1
+}
+
 # PATH for scons and h5
-export PATH=${PWD}/tools/local/bin:$PATH
+export PATH=${_setup_env_dir}/tools/local/bin:$PATH
 
 #Intel Pin, set pin path
-export PINPATH=${PWD}/tools/pin-2.14-71313-gcc.4.4.7-linux
+export PINPATH=${_setup_env_dir}/tools/pin-2.14-71313-gcc.4.4.7-linux
+
+if [ ! -f "${PINPATH}/source/include/pin/pin.H" ] && [ ! -f "${PINPATH}/source/include/pin.H" ]; then
+    _setup_env_fail "Pin kit is missing or incomplete at ${PINPATH}; expected source/include/pin/pin.H"
+fi
 
 # Libconfig, set your libconfig path
-export LIBCONFIGPATH=${PWD}/tools/local
+export LIBCONFIGPATH=${_setup_env_dir}/tools/local
+
+# HDF5, set your HDF5 path
+export HDF5PATH=${_setup_env_dir}/tools/local
 
 # parsec
-export PARSEC=${PWD}/benchmarks/parsec-2.1
-export PARSECBIN=${PWD}/benchmarks/parsec-2.1/bin
-export PARSECINPUTS=${PWD}/benchmarks/parsec-2.1/inputs
+export PARSEC=${_setup_env_dir}/benchmarks/parsec-2.1
+export PARSECBIN=${_setup_env_dir}/benchmarks/parsec-2.1/bin
+export PARSECINPUTS=${_setup_env_dir}/benchmarks/parsec-2.1/inputs
 
 # SPEC CPU2006
-export CPU2006=${PWD}/benchmarks/spec_cpu2006
-export CPU2006BIN=${PWD}/benchmarks/spec_cpu2006/bin
-export CPU2006DATA=${PWD}/benchmarks/spec_cpu2006/data
+export CPU2006=${_setup_env_dir}/benchmarks/spec_cpu2006
+export CPU2006BIN=${_setup_env_dir}/benchmarks/spec_cpu2006/bin
+export CPU2006DATA=${_setup_env_dir}/benchmarks/spec_cpu2006/data
 
 # zsim
-export ZSIMPATH=${PWD}/zsim
-export ZSIMHOOKS=${PWD}/zsim/misc/hooks
-export PATH=/bin:$PATH
+export ZSIMPATH=${_setup_env_dir}/zsim
+export ZSIMHOOKS=${_setup_env_dir}/zsim/misc/hooks
+
+unset _setup_env_dir
+unset -f _setup_env_fail
