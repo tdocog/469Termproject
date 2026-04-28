@@ -1,0 +1,71 @@
+[Fri Apr 24 16:38:12 CDT 2026] START configs/hw4/SHiP-ISeq/blackscholes_8c_simlarge.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/blackscholes_8c_simlarge.cfg > outputs/hw4/SHiP-ISeq/blackscholes_8c_simlarge/blackscholes.log 2>&1
+[Fri Apr 24 16:39:43 CDT 2026] DONE  configs/hw4/SHiP-ISeq/blackscholes_8c_simlarge.cfg
+[Fri Apr 24 16:39:43 CDT 2026] START configs/hw4/SHiP-ISeq/bodytrack_8c_simlarge.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/bodytrack_8c_simlarge.cfg > outputs/hw4/SHiP-ISeq/bodytrack_8c_simlarge/bodytrack.log 2>&1
+[Fri Apr 24 16:44:19 CDT 2026] DONE  configs/hw4/SHiP-ISeq/bodytrack_8c_simlarge.cfg
+[Fri Apr 24 16:44:19 CDT 2026] START configs/hw4/SHiP-ISeq/bzip2.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/bzip2.cfg > outputs/hw4/SHiP-ISeq/bzip2/bzip2.log 2>&1
+[Fri Apr 24 16:45:26 CDT 2026] DONE  configs/hw4/SHiP-ISeq/bzip2.cfg
+[Fri Apr 24 16:45:26 CDT 2026] START configs/hw4/SHiP-ISeq/cactusADM.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/cactusADM.cfg > outputs/hw4/SHiP-ISeq/cactusADM/cactusADM.log 2>&1
+[Fri Apr 24 17:48:19 CDT 2026] DONE  configs/hw4/SHiP-ISeq/cactusADM.cfg
+[Fri Apr 24 17:48:19 CDT 2026] START configs/hw4/SHiP-ISeq/calculix.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/calculix.cfg > outputs/hw4/SHiP-ISeq/calculix/calculix.log 2>&1
+[Fri Apr 24 19:21:39 CDT 2026] DONE  configs/hw4/SHiP-ISeq/calculix.cfg
+[Fri Apr 24 19:21:39 CDT 2026] START configs/hw4/SHiP-ISeq/canneal_8c_simlarge.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/canneal_8c_simlarge.cfg > outputs/hw4/SHiP-ISeq/canneal_8c_simlarge/canneal.log 2>&1
+[Fri Apr 24 19:23:33 CDT 2026] DONE  configs/hw4/SHiP-ISeq/canneal_8c_simlarge.cfg
+[Fri Apr 24 19:23:33 CDT 2026] START configs/hw4/SHiP-ISeq/dedup_8c_simlarge.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/dedup_8c_simlarge.cfg > outputs/hw4/SHiP-ISeq/dedup_8c_simlarge/dedup.log 2>&1
+[Fri Apr 24 19:30:28 CDT 2026] DONE  configs/hw4/SHiP-ISeq/dedup_8c_simlarge.cfg
+[Fri Apr 24 19:30:28 CDT 2026] START configs/hw4/SHiP-ISeq/fluidanimate_8c_simlarge.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/fluidanimate_8c_simlarge.cfg > outputs/hw4/SHiP-ISeq/fluidanimate_8c_simlarge/fluidanimate.log 2>&1
+[Fri Apr 24 19:33:09 CDT 2026] DONE  configs/hw4/SHiP-ISeq/fluidanimate_8c_simlarge.cfg
+[Fri Apr 24 19:33:09 CDT 2026] START configs/hw4/SHiP-ISeq/freqmine_8c_simlarge.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/freqmine_8c_simlarge.cfg > outputs/hw4/SHiP-ISeq/freqmine_8c_simlarge/freqmine.log 2>&1
+[Fri Apr 24 19:33:11 CDT 2026] DONE  configs/hw4/SHiP-ISeq/freqmine_8c_simlarge.cfg
+[Fri Apr 24 19:33:11 CDT 2026] START configs/hw4/SHiP-ISeq/gcc.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/gcc.cfg > outputs/hw4/SHiP-ISeq/gcc/gcc.log 2>&1
+[Fri Apr 24 19:43:35 CDT 2026] DONE  configs/hw4/SHiP-ISeq/gcc.cfg
+[Fri Apr 24 19:43:35 CDT 2026] START configs/hw4/SHiP-ISeq/hmmer.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/hmmer.cfg > outputs/hw4/SHiP-ISeq/hmmer/hmmer.log 2>&1
+[Fri Apr 24 20:46:49 CDT 2026] DONE  configs/hw4/SHiP-ISeq/hmmer.cfg
+[Fri Apr 24 20:46:49 CDT 2026] START configs/hw4/SHiP-ISeq/lbm.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/lbm.cfg > outputs/hw4/SHiP-ISeq/lbm/lbm.log 2>&1
+[Fri Apr 24 21:08:57 CDT 2026] DONE  configs/hw4/SHiP-ISeq/lbm.cfg
+[Fri Apr 24 21:08:57 CDT 2026] START configs/hw4/SHiP-ISeq/leslie3d.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/leslie3d.cfg > outputs/hw4/SHiP-ISeq/leslie3d/leslie3d.log 2>&1
+[Fri Apr 24 21:08:57 CDT 2026] FAIL  configs/hw4/SHiP-ISeq/leslie3d.cfg exit=112
+[Fri Apr 24 21:08:57 CDT 2026] START configs/hw4/SHiP-ISeq/libquantum.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/libquantum.cfg > outputs/hw4/SHiP-ISeq/libquantum/libquantum.log 2>&1
+[Fri Apr 24 22:28:36 CDT 2026] DONE  configs/hw4/SHiP-ISeq/libquantum.cfg
+[Fri Apr 24 22:28:36 CDT 2026] START configs/hw4/SHiP-ISeq/mcf.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/mcf.cfg > outputs/hw4/SHiP-ISeq/mcf/mcf.log 2>&1
+[Fri Apr 24 22:36:23 CDT 2026] DONE  configs/hw4/SHiP-ISeq/mcf.cfg
+[Fri Apr 24 22:36:23 CDT 2026] START configs/hw4/SHiP-ISeq/milc.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/milc.cfg > outputs/hw4/SHiP-ISeq/milc/milc.log 2>&1
+[Fri Apr 24 22:36:23 CDT 2026] FAIL  configs/hw4/SHiP-ISeq/milc.cfg exit=112
+[Fri Apr 24 22:36:23 CDT 2026] START configs/hw4/SHiP-ISeq/namd.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/namd.cfg > outputs/hw4/SHiP-ISeq/namd/namd.log 2>&1
+[Fri Apr 24 22:36:36 CDT 2026] DONE  configs/hw4/SHiP-ISeq/namd.cfg
+[Fri Apr 24 22:36:36 CDT 2026] START configs/hw4/SHiP-ISeq/sjeng.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/sjeng.cfg > outputs/hw4/SHiP-ISeq/sjeng/sjeng.log 2>&1
+[Fri Apr 24 23:25:03 CDT 2026] DONE  configs/hw4/SHiP-ISeq/sjeng.cfg
+[Fri Apr 24 23:25:03 CDT 2026] START configs/hw4/SHiP-ISeq/soplex.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/soplex.cfg > outputs/hw4/SHiP-ISeq/soplex/soplex.log 2>&1
+[Fri Apr 24 23:55:35 CDT 2026] DONE  configs/hw4/SHiP-ISeq/soplex.cfg
+[Fri Apr 24 23:55:35 CDT 2026] START configs/hw4/SHiP-ISeq/streamcluster_8c_simlarge.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/streamcluster_8c_simlarge.cfg > outputs/hw4/SHiP-ISeq/streamcluster_8c_simlarge/streamcluster.log 2>&1
+[Fri Apr 24 23:57:37 CDT 2026] DONE  configs/hw4/SHiP-ISeq/streamcluster_8c_simlarge.cfg
+[Fri Apr 24 23:57:37 CDT 2026] START configs/hw4/SHiP-ISeq/swaptions_8c_simlarge.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/swaptions_8c_simlarge.cfg > outputs/hw4/SHiP-ISeq/swaptions_8c_simlarge/swaptions.log 2>&1
+[Fri Apr 24 23:59:50 CDT 2026] DONE  configs/hw4/SHiP-ISeq/swaptions_8c_simlarge.cfg
+[Fri Apr 24 23:59:50 CDT 2026] START configs/hw4/SHiP-ISeq/x264_8c_simlarge.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/x264_8c_simlarge.cfg > outputs/hw4/SHiP-ISeq/x264_8c_simlarge/x264.log 2>&1
+[Sat Apr 25 00:03:50 CDT 2026] DONE  configs/hw4/SHiP-ISeq/x264_8c_simlarge.cfg
+[Sat Apr 25 00:03:50 CDT 2026] START configs/hw4/SHiP-ISeq/xalan.cfg
+./build/opt/zsim configs/hw4/SHiP-ISeq/xalan.cfg > outputs/hw4/SHiP-ISeq/xalan/xalan.log 2>&1
+[Sat Apr 25 00:58:44 CDT 2026] DONE  configs/hw4/SHiP-ISeq/xalan.cfg
+[Sat Apr 25 00:58:44 CDT 2026] SUMMARY ok=21 failed=2
+Failures: outputs/hw4/SHiP-ISeq/_driver/ALL.failures

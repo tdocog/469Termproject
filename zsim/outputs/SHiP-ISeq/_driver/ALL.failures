@@ -1,0 +1,2 @@
+configs/hw4/SHiP-ISeq/leslie3d.cfg exit=112 log=outputs/hw4/SHiP-ISeq/leslie3d/leslie3d.log
+configs/hw4/SHiP-ISeq/milc.cfg exit=112 log=outputs/hw4/SHiP-ISeq/milc/milc.log

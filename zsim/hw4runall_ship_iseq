@@ -4,11 +4,13 @@ script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd)
 cd "$script_dir" || exit 1
 
 repl="SHiP-ISeq"
+run_label="500M"
 zsim_bin="./build/opt/zsim"
 config_dir="configs/hw4/$repl"
+output_root="outputs/hw4/$run_label/$repl"
 
-spec_benches="bzip2 gcc mcf hmmer sjeng libquantum milc cactusADM leslie3d namd soplex calculix lbm xalan"
-parsec_benches="blackscholes bodytrack canneal dedup fluidanimate freqmine streamcluster swaptions x264"
+spec_benches="bzip2 gcc mcf hmmer xalan milc cactusADM leslie3d namd calculix sjeng libquantum soplex lbm"
+parsec_benches="blackscholes bodytrack fluidanimate streamcluster swaptions canneal x264"
 
 suite="ALL"
 bg_mode=1
@@ -49,18 +51,17 @@ if [ ! -x "$zsim_bin" ]; then
     exit 1
 fi
 
-driver_dir="outputs/hw4/$repl/_driver"
+driver_dir="$output_root/_driver"
 mkdir -p "$driver_dir"
 driver_log="$driver_dir/${suite}.log"
 pid_file="$driver_dir/${suite}.pid"
 fail_log="$driver_dir/${suite}.failures"
-cfg_list="$driver_dir/${suite}.configs"
 
 run_cfg() {
     cfg="$1"
     bench=$(basename "$cfg" .cfg)
     log_name=${bench%_8c_simlarge}
-    outdir="outputs/hw4/$repl/$bench"
+    outdir="$output_root/$bench"
     logfile="$outdir/$log_name.log"
 
     mkdir -p "$outdir"
@@ -95,10 +96,8 @@ run_selected() {
         SPEC)   run_spec ;;
         PARSEC) run_parsec ;;
         ALL)
-            find "$config_dir" -maxdepth 1 -type f -name '*.cfg' | sort > "$cfg_list"
-            while IFS= read -r cfg; do
-                run_cfg "$cfg"
-            done < "$cfg_list"
+            run_spec
+            run_parsec
             ;;
         *)
             echo "Invalid suite: $suite"
@@ -119,7 +118,6 @@ if [ "$bg_mode" -eq 1 ]; then
 fi
 
 rm -f "$fail_log"
-rm -f "$cfg_list"
 run_selected
 echo "[$(date)] SUMMARY ok=$ok_count failed=$fail_count"
 if [ "$fail_count" -ne 0 ]; then
